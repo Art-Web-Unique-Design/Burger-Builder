@@ -5,19 +5,19 @@ import Button from '../../UI/Button/Button';
 
 class OrderSummary extends Component {
     // This could be a functional component, doesn't have to be a class
-    componentWillUpdate() {
-        console.log('[OrderSummary] WillUpdate');
-    }
+    // componentWillUpdate() {
+    //     console.log('[OrderSummary] WillUpdate');
+    // }
 
     render() {
         const ingredientSummary = Object.keys(this.props.ingredients)
-                                .map((igKey) => {
-                                    return (
-                                        <li key={igKey}>
-                                            <span style={{textTransform: 'capitalize'}}>{igKey}</span>: {this.props.ingredients[igKey]}
-                                        </li>)
-                                });
-        return(
+            .map((igKey) => {
+                return (
+                    <li key={igKey}>
+                        <span style={{ textTransform: 'capitalize' }}>{igKey}</span>: {this.props.ingredients[igKey]}
+                    </li>)
+            });
+        return (
             <Aux>
                 <h3>Your order</h3>
                 <p>A delicious burger with the following ingredients:</p>
