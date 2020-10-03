@@ -1,8 +1,40 @@
 .Order {
-    width: 100%;
+    width: 80%;
     border: 1px solid #eee;
     box-shadow: 0 2px 3px #ccc;
     padding: 10px;
     margin: 10px auto;
     box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+}
+
+.CloseBtn {
+    display: flex;
+    justify-content: center;
+    padding: 18px;
+    align-self: flex-start;
+    position: relative;
+    margin-top: 5px;
+    cursor: pointer;
+    transition: .15s ease-out;
+    transform: rotate(0);
+}
+
+.CloseBtn::before,
+.CloseBtn::after {
+    content: '';
+    border: 1px solid #8f5C2C;
+    width: 100%;
+    margin-top: -1px;
+    transform: rotate(45deg);
+    position: absolute;
+}
+
+.CloseBtn::after {
+    transform: rotate(-45deg);
+}
+
+.CloseBtn:hover {
+    transform: rotate(90deg);
 }
