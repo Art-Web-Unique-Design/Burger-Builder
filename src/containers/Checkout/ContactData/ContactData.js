@@ -9,89 +9,39 @@ import Input from '../../../components/UI/Input/Input';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../../store/actions/index';
 
+const validStateFuncCreation = (elementConf, validation = { required: true }, valid = false, value = '', elType = 'input', touched = false) => {
+    return ({
+        elementType: elType,
+        elementConfig: { ...elementConf },
+        value: value,
+        validation: { ...validation },
+        valid: valid,
+        touched: touched
+    });
+}
+
 class ContactData extends Component {
     // Create SMTH like a function instead of this state!
     state = {
         orderForm: {
-            name: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'text',
-                    placeholder: 'Your Name'
-                },
-                value: '',
-                validation: {
-                    required: true
-                },
-                valid: false,
-                touched: false
-            },
-            street: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'text',
-                    placeholder: 'Street'
-                },
-                value: '',
-                validation: {
-                    required: true
-                },
-                valid: false,
-                touched: false
-            },
-            zipCode: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'number',
-                    placeholder: 'ZIP Code'
-                },
-                value: '',
-                validation: {
-                    required: true,
-                    minLength: 5,
-                    maxLength: 5
-                },
-                valid: false,
-                touched: false
-            },
-            country: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'text',
-                    placeholder: 'Country'
-                },
-                value: '',
-                validation: {
-                    required: true
-                },
-                valid: false,
-                touched: false
-            },
-            email: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'email',
-                    placeholder: 'Your E-Mail'
-                },
-                value: '',
-                validation: {
-                    required: true
-                },
-                valid: false,
-                touched: false
-            },
-            deliveryMethod: {
-                elementType: 'select',
-                elementConfig: {
-                    options: [
-                        { value: 'fastest', displayValue: 'Fastest' },
-                        { value: 'cheapest', displayValue: 'Cheapest' }
-                    ]
-                },
-                validation: {},
-                value: 'fastest',
-                valid: true
-            }
+            name: validStateFuncCreation({ type: 'text', placeholder: 'Your Name' }),
+
+            street: validStateFuncCreation({ type: 'text', placeholder: 'Street' }),
+
+            zipCode: validStateFuncCreation({ type: 'number', placeholder: 'ZIP Code' },
+                { required: true, minLength: 5, maxLength: 6 }),
+
+            country: validStateFuncCreation({ type: 'text', placeholder: 'Country' }),
+
+            email: validStateFuncCreation({ type: 'email', placeholder: 'Your E-Mail' }, { required: true, isEmail: true }),
+
+            deliveryMethod: validStateFuncCreation({
+                options: [
+                    { value: 'fastest', displayValue: 'Fastest' },
+                    { value: 'cheapest', displayValue: 'Cheapest' }
+                ]
+            }, {}, true, 'fastest', 'select', null),
+
         },
         formIsValid: false
     }
@@ -105,9 +55,10 @@ class ContactData extends Component {
         const order = {
             ingredients: this.props.ings,
             price: this.props.price,
-            orderData: formData
+            orderData: formData,
+            userId: this.props.userId
         }
-        this.props.onOrderBurger(order);
+        this.props.onOrderBurger(order, this.props.token);
     }
 
     checkValidity(value, rules) {
@@ -120,11 +71,16 @@ class ContactData extends Component {
             isValid = value.trim() !== '' && isValid;
         }
 
+        if (rules.isEmail) {
+            const pattern = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+            isValid = pattern.test(value) && isValid;
+        }
+
         if (rules.minLength) {
             isValid = value.length >= rules.minLength && isValid;
         }
 
-        if (rules.minLength) {
+        if (rules.maxLength) {
             isValid = value.length <= rules.maxLength && isValid;
         }
 
@@ -192,13 +148,15 @@ const mapStateToProps = state => {
     return {
         ings: state.burgerBuilder.ingredients,
         price: state.burgerBuilder.totalPrice,
-        loading: state.order.loading
+        loading: state.order.loading,
+        token: state.auth.token,
+        userId: state.auth.userId
     }
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onOrderBurger: (orderData) => dispatch(actions.purchaseBurger(orderData))
+        onOrderBurger: (orderData, token) => dispatch(actions.purchaseBurger(orderData, token))
     };
 };
 

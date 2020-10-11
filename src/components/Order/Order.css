@@ -12,7 +12,7 @@
 .CloseBtn {
     display: flex;
     justify-content: center;
-    padding: 18px;
+    padding: 16px;
     align-self: flex-start;
     position: relative;
     margin-top: 5px;
@@ -38,3 +38,25 @@
 .CloseBtn:hover {
     transform: rotate(90deg);
 }
+
+.ViewBtn {
+    margin: 0;
+    margin-top: -7px;
+    position: relative;
+    overflow: hidden;
+    padding-left: 0;
+}
+
+.ViewBtn:hover {
+    color: #944317;
+}
+
+.ViewBtn::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 90%;
+    width: calc(100% - 10px);
+    border-top: 2px solid currentColor;
+}
+
