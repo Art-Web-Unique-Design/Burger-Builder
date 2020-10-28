@@ -9,7 +9,6 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import * as actions from '../../store/actions/index';
 import Spinner from '../../components/UI/Spinner/Spinner';
 
-
 class Orders extends Component {
     state = {
         orderId: ''
@@ -36,7 +35,6 @@ class Orders extends Component {
     render() {
         let orders = <Spinner />;
         if (!this.props.loading) {
-            //console.log(this.props.orders);
             orders = this.props.orders.map(order => (
                 <Order
                     key={order.id}
@@ -49,8 +47,6 @@ class Orders extends Component {
                 />
             ));
         };
-
-        console.log(this.props);
 
         if (!(this.props.location.pathname === this.props.match.url)) {
             orders = <Route

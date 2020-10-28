@@ -9,12 +9,10 @@ import Burger from '../../Burger/Burger';
 const checkDataEmpty = (data) => (data ? data : 'Empty Data ');
 
 const orderDetails = (props) => {
-    console.log(props);
     const order = props.orderData.find((item) => item.id === props.orderId);
     if (!order) {
         return <Redirect to='/orders' />;
     } else {
-        console.log(order.ingredients);
         return (
             <div className={classes.OrderDetails}>
                 <Button

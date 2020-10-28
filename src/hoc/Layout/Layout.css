@@ -1,3 +1,6 @@
 .Content {
     margin-top: 55px;
+    height: calc(100vh - 55px);
+    display: flex;
+    flex-direction: column;
 }

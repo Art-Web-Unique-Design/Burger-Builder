@@ -7,6 +7,7 @@ import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import classes from './Auth.css';
 import * as actions from '../../store/actions/index';
+import { updateObject, checkValidity } from '../../shared/utility';
 
 const validStateFuncCreation = (elementConf, validation = { required: true }, valid = false, value = '', elType = 'input', touched = false) => {
     return ({
@@ -36,42 +37,14 @@ class Auth extends Component {
         }
     }
 
-    checkValidity(value, rules) {
-        let isValid = true;
-        if (!rules) {
-            return true;
-        }
-
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
-        }
-
-        if (rules.isEmail) {
-            const pattern = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-            isValid = pattern.test(value) && isValid;
-        }
-
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid;
-        }
-
-        if (rules.maxLength) {
-            isValid = value.length <= rules.maxLength && isValid;
-        }
-
-        return isValid;
-    }
-
     inputChangedHandler = (event, controlName) => {
-        const updatedControls = {
-            ...this.state.controls,
-            [controlName]: {
-                ...this.state.controls[controlName],
+        const updatedControls = updateObject(this.state.controls, {
+            [controlName]: updateObject(this.state.controls[controlName], {
                 value: event.target.value,
-                valid: this.checkValidity(event.target.value, this.state.controls[controlName].validation),
+                valid: checkValidity(event.target.value, this.state.controls[controlName].validation),
                 touched: true
-            }
-        };
+            })
+        });
         this.setState({ controls: updatedControls })
     }
 
@@ -113,11 +86,10 @@ class Auth extends Component {
         }
 
         let errorMessage = null;
-        console.log(this.props.error);
 
         // Firebase Backend returns error(Object) with a message prop
         if (this.props.error) {
-            let msg = '';
+            let msg = "";
             switch (this.props.error.message) {
                 case 'EMAIL_EXISTS':
                     msg = "This email address already exists.";
@@ -149,6 +121,7 @@ class Auth extends Component {
                 case "INVALID_PASSWORD":
                     msg = "Password is invalid.";
                     break;
+                default: msg = "";
             }
             errorMessage = (
                 <p>{msg}</p>

@@ -28,7 +28,6 @@ export const purchaseBurger = (orderData, token) => {
         dispatch(purchaseBurgerStart());
         axios.post('/orders.json?auth=' + token, orderData)
             .then(response => {
-                console.log(response);
                 dispatch(purchaseBurgerSuccess(response.data.name, orderData));
             })
             .catch(error => {
@@ -42,7 +41,8 @@ export const purchaseInit = () => {
         type: actionTypes.PURCHASE_INIT
     };
 };
-// Part of reducer where we Fetch orders from dataBase
+
+// Part where we Fetch orders from dataBase
 export const fetchOrdersSuccess = (orders) => {
     return {
         type: actionTypes.FETCH_ORDERS_SUCCESS,
