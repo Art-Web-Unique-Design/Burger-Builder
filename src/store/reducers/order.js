@@ -33,7 +33,7 @@ const deleteOrderStart = (state, action) => {
     return updateObject(state, { loading: true });
 }
 const deleteOrderSuccess = (state, action) => {
-    let newArray = action.orders.slice().filter((item) => item.id !== action.orderId);
+    let newArray = state.orders.slice().filter((item) => item.id !== action.orderId);
     return updateObject(state, { orders: newArray, loading: false });
 }
 const deleteOrderFail = (state, action) => {

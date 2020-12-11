@@ -37,10 +37,16 @@ const removeIngredient = (state, action) => {
 }
 
 const setIngredients = (state, action) => {
+    let sum = 0;
+    Object.keys(action.ingredients)
+        .map(igKey => {
+            sum += INGREDIENT_PRICES[igKey] * action.ingredients[igKey];
+            return {};
+        });
     return updateObject(state, {
         // Here i can change an order of ingredients
         ingredients: action.ingredients,
-        totalPrice: 4,
+        totalPrice: 4 + sum,
         error: false,
         building: false
     });
